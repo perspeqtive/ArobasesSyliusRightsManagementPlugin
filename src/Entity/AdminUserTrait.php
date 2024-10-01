@@ -12,8 +12,9 @@ trait AdminUserTrait
      * @ORM\ManyToOne(targetEntity="Arobases\SyliusRightsManagementPlugin\Entity\Role",
      *     inversedBy="adminUsers",
      *     fetch="EXTRA_LAZY",
-     *      cascade={"persist"}
+     *     cascade={"persist"}
      * )
+     * @ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected ?Role $role = null;
 
