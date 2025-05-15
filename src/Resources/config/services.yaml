@@ -69,17 +69,17 @@ services:
 
 
 
-    Arobases\SyliusRightsManagementPlugin\Provider\CurrentAdminUserProviderInterface:
-      alias: arobases_sylius_rights_management_plugin.provider.current_admin_user_provider
+  Arobases\SyliusRightsManagementPlugin\Provider\CurrentAdminUserProviderInterface:
+    alias: arobases_sylius_rights_management_plugin.provider.current_admin_user_provider
 
-    Arobases\SyliusRightsManagementPlugin\Menu\AdminMenuListenerInterface:
-      alias: arobases_sylius_rights_management_plugin.listener.admin_menu
+  Arobases\SyliusRightsManagementPlugin\Menu\AdminMenuListenerInterface:
+    alias: arobases_sylius_rights_management_plugin.listener.admin_menu
 
-    Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminRouteCheckerInterface:
-      alias: arobases_sylius_rights_management_plugin.checker.admin_route_checker
+  Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminRouteCheckerInterface:
+    alias: arobases_sylius_rights_management_plugin.checker.admin_route_checker
 
-    Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminUserAccessCheckerInterface:
-      alias: arobases_sylius_rights_management_plugin.checker.admin_user_access_checker
+  Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminUserAccessCheckerInterface:
+    alias: arobases_sylius_rights_management_plugin.checker.admin_user_access_checker
 
-    Arobases\SyliusRightsManagementPlugin\Access\Listener\AccessCheckListenerInterface:
-      alias: arobases_sylius_rights_management_plugin.listener.access_check_listener
+  Arobases\SyliusRightsManagementPlugin\Access\Listener\AccessCheckListenerInterface:
+    alias: arobases_sylius_rights_management_plugin.listener.access_check_listener
