@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arobases\SyliusRightsManagementPlugin\Access\Checker;
 
-class AdminRouteChecker
+class AdminRouteChecker implements AdminRouteCheckerInterface
 {
     public function isAdminRoute(string $routeName): bool
     {

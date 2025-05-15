@@ -7,7 +7,7 @@ namespace Arobases\SyliusRightsManagementPlugin\Provider;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class CurrentAdminUserProvider
+class CurrentAdminUserProvider implements CurrentAdminUserProviderInterface
 {
     private TokenStorageInterface $tokenStorage;
 

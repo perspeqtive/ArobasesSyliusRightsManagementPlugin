@@ -8,7 +8,7 @@ use Arobases\SyliusRightsManagementPlugin\Entity\Right;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class AdminUserAccessChecker
+class AdminUserAccessChecker implements AdminUserAccessCheckerInterface
 {
     private RouterInterface $router;
 

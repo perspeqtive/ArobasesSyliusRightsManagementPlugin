@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace Arobases\SyliusRightsManagementPlugin\Menu;
 
-use Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminUserAccessChecker;
-use Arobases\SyliusRightsManagementPlugin\Provider\CurrentAdminUserProvider;
+use Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminUserAccessCheckerInterface;
+use Arobases\SyliusRightsManagementPlugin\Provider\CurrentAdminUserProviderInterface;
 use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
 
-final class AdminMenuListener
+final class AdminMenuListener implements AdminMenuListenerInterface
 {
-    private AdminUserAccessChecker $adminUserAccessChecker;
+    private AdminUserAccessCheckerInterface $adminUserAccessChecker;
 
-    private CurrentAdminUserProvider $currentAdminUserProvider;
+    private CurrentAdminUserProviderInterface $currentAdminUserProvider;
 
-    public function __construct(AdminUserAccessChecker $adminUserAccessChecker, CurrentAdminUserProvider $currentAdminUserProvider)
+
+    public function __construct(AdminUserAccessCheckerInterface $adminUserAccessChecker, CurrentAdminUserProviderInterface $currentAdminUserProvider)
     {
         $this->adminUserAccessChecker = $adminUserAccessChecker;
         $this->currentAdminUserProvider = $currentAdminUserProvider;
     }
+
 
     public function addAdminMenuItems(MenuBuilderEvent $event): void
     {

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Arobases\SyliusRightsManagementPlugin\Access\Listener;
 
-use Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminRouteChecker;
-use Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminUserAccessChecker;
-use Arobases\SyliusRightsManagementPlugin\Provider\CurrentAdminUserProvider;
+use Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminRouteCheckerInterface;
+use Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminUserAccessCheckerInterface;
+use Arobases\SyliusRightsManagementPlugin\Provider\CurrentAdminUserProviderInterface;
 use Sylius\Component\Core\Model\AdminUserInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -14,19 +14,20 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-class AccessCheckListener
+class AccessCheckListener implements AccessCheckListenerInterface
 {
-    private CurrentAdminUserProvider $currentAdminUserProvider;
+    private CurrentAdminUserProviderInterface $currentAdminUserProvider;
 
-    private AdminUserAccessChecker $adminUserAccessChecker;
+    private AdminUserAccessCheckerInterface $adminUserAccessChecker;
 
-    private AdminRouteChecker $adminRouteAccessChecker;
+    private AdminRouteCheckerInterface $adminRouteAccessChecker;
 
     private Session $session;
 
     private RouterInterface $router;
 
-    public function __construct(CurrentAdminUserProvider $currentAdminUserProvider, AdminUserAccessChecker $adminUserAccessChecker, AdminRouteChecker $adminRouteAccessChecker, Session $session, RouterInterface $router)
+
+    public function __construct(CurrentAdminUserProviderInterface $currentAdminUserProvider, AdminUserAccessCheckerInterface $adminUserAccessChecker, AdminRouteCheckerInterface $adminRouteAccessChecker, Session $session, RouterInterface $router)
     {
         $this->currentAdminUserProvider = $currentAdminUserProvider;
         $this->adminUserAccessChecker = $adminUserAccessChecker;
@@ -34,6 +35,7 @@ class AccessCheckListener
         $this->session = $session;
         $this->router = $router;
     }
+
 
     public function onKernelRequest(RequestEvent $event): void
     {
