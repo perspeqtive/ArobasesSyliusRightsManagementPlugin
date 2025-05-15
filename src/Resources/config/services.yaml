@@ -9,14 +9,14 @@ services:
     arguments:
       - '@arobases_sylius_rights_management_plugin.repository.right'
     tags:
-      - { name: form.type}
+      - { name: form.type }
 
   arobases_sylius_rights_management_plugin.form.type.admin.role_choice:
     class: Arobases\SyliusRightsManagementPlugin\Form\Type\Admin\RoleChoiceType
     arguments:
       - '@arobases_sylius_rights_management_plugin.repository.role'
     tags:
-      - { name: form.type}
+      - { name: form.type }
 
   arobases_sylius_rights_management_plugin.form.admin_user:
     class: Arobases\SyliusRightsManagementPlugin\Form\Extension\AdminUserTypeExtension
@@ -64,9 +64,10 @@ services:
       
   arobases_sylius_rights_management_plugin.listener.admin_menu:
     class: Arobases\SyliusRightsManagementPlugin\Menu\AdminMenuListener
+    autowire: true
+    autoconfigure: true
     tags:
       - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }
-
 
 
   Arobases\SyliusRightsManagementPlugin\Provider\CurrentAdminUserProviderInterface:
