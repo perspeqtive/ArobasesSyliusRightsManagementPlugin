@@ -9,14 +9,14 @@ services:
     arguments:
       - '@arobases_sylius_rights_management_plugin.repository.right'
     tags:
-      - { name: form.type }
+      - { name: form.type}
 
   arobases_sylius_rights_management_plugin.form.type.admin.role_choice:
     class: Arobases\SyliusRightsManagementPlugin\Form\Type\Admin\RoleChoiceType
     arguments:
       - '@arobases_sylius_rights_management_plugin.repository.role'
     tags:
-      - { name: form.type }
+      - { name: form.type}
 
   arobases_sylius_rights_management_plugin.form.admin_user:
     class: Arobases\SyliusRightsManagementPlugin\Form\Extension\AdminUserTypeExtension
@@ -27,7 +27,7 @@ services:
     class: Arobases\SyliusRightsManagementPlugin\Twig\Extensions\FormatRightArrayExtension
     public: false
     tags:
-        - { name: twig.extension }
+      - { name: twig.extension }
 
   arobases_sylius_rights_management_plugin.checker.admin_route_checker:
     class: Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminRouteChecker
@@ -49,6 +49,9 @@ services:
       - '@arobases_sylius_rights_management_plugin.adapter.right_adapter'
       - '@arobases_sylius_rights_management_plugin.repository.right_group'
       - '@arobases_sylius_rights_management_plugin.repository.right'
+      - '%default_admin_user%'
+      - '%default_admin_role_code%'
+      - '%default_admin_role_name%'
     tags:
       - { name: console.command }
 
@@ -59,28 +62,19 @@ services:
 
   arobases_sylius_rights_management_plugin.listener.access_check_listener:
     class: Arobases\SyliusRightsManagementPlugin\Access\Listener\AccessCheckListener
+    arguments:
+      - '@arobases_sylius_rights_management_plugin.provider.current_admin_user_provider'
+      - '@arobases_sylius_rights_management_plugin.checker.admin_user_access_checker'
+      - '@arobases_sylius_rights_management_plugin.checker.admin_route_checker'
+      - '@request_stack'
+      - '@Symfony\Component\Routing\RouterInterface'
     tags:
       - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-      
+
   arobases_sylius_rights_management_plugin.listener.admin_menu:
     class: Arobases\SyliusRightsManagementPlugin\Menu\AdminMenuListener
-    autowire: true
-    autoconfigure: true
+    arguments:
+      - '@arobases_sylius_rights_management_plugin.checker.admin_user_access_checker'
+      - '@arobases_sylius_rights_management_plugin.provider.current_admin_user_provider'
     tags:
       - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }
-
-
-  Arobases\SyliusRightsManagementPlugin\Provider\CurrentAdminUserProviderInterface:
-    alias: arobases_sylius_rights_management_plugin.provider.current_admin_user_provider
-
-  Arobases\SyliusRightsManagementPlugin\Menu\AdminMenuListenerInterface:
-    alias: arobases_sylius_rights_management_plugin.listener.admin_menu
-
-  Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminRouteCheckerInterface:
-    alias: arobases_sylius_rights_management_plugin.checker.admin_route_checker
-
-  Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminUserAccessCheckerInterface:
-    alias: arobases_sylius_rights_management_plugin.checker.admin_user_access_checker
-
-  Arobases\SyliusRightsManagementPlugin\Access\Listener\AccessCheckListenerInterface:
-    alias: arobases_sylius_rights_management_plugin.listener.access_check_listener

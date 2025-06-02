@@ -4,38 +4,41 @@ declare(strict_types=1);
 
 namespace Arobases\SyliusRightsManagementPlugin\Access\Listener;
 
-use Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminRouteCheckerInterface;
-use Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminUserAccessCheckerInterface;
-use Arobases\SyliusRightsManagementPlugin\Provider\CurrentAdminUserProviderInterface;
+use Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminRouteChecker;
+use Arobases\SyliusRightsManagementPlugin\Access\Checker\AdminUserAccessChecker;
+use Arobases\SyliusRightsManagementPlugin\Provider\CurrentAdminUserProvider;
 use Sylius\Component\Core\Model\AdminUserInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-class AccessCheckListener implements AccessCheckListenerInterface
+class AccessCheckListener
 {
-    private CurrentAdminUserProviderInterface $currentAdminUserProvider;
+    private CurrentAdminUserProvider $currentAdminUserProvider;
 
-    private AdminUserAccessCheckerInterface $adminUserAccessChecker;
+    private AdminUserAccessChecker $adminUserAccessChecker;
 
-    private AdminRouteCheckerInterface $adminRouteAccessChecker;
+    private AdminRouteChecker $adminRouteAccessChecker;
 
-    private Session $session;
+    private RequestStack $requestStack;
 
     private RouterInterface $router;
 
-
-    public function __construct(CurrentAdminUserProviderInterface $currentAdminUserProvider, AdminUserAccessCheckerInterface $adminUserAccessChecker, AdminRouteCheckerInterface $adminRouteAccessChecker, Session $session, RouterInterface $router)
-    {
+    public function __construct(
+        CurrentAdminUserProvider $currentAdminUserProvider,
+        AdminUserAccessChecker $adminUserAccessChecker,
+        AdminRouteChecker $adminRouteAccessChecker,
+        RequestStack $requestStack,
+        RouterInterface $router
+    ) {
         $this->currentAdminUserProvider = $currentAdminUserProvider;
         $this->adminUserAccessChecker = $adminUserAccessChecker;
         $this->adminRouteAccessChecker = $adminRouteAccessChecker;
-        $this->session = $session;
+        $this->requestStack = $requestStack;
         $this->router = $router;
     }
-
 
     public function onKernelRequest(RequestEvent $event): void
     {
@@ -84,7 +87,7 @@ class AccessCheckListener implements AccessCheckListenerInterface
 
     protected function redirectUser(string $route, string $message): RedirectResponse
     {
-        $this->session->getFlashBag()->add('error', $message);
+        $this->requestStack->getSession()->getFlashBag()->add('error', $message);
 
         return new RedirectResponse($route);
     }
