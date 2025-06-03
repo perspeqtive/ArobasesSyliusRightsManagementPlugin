@@ -33,21 +33,24 @@ class ChannelFilterConfigurator implements ChannelFilterConfiguratorInterface
     }
 
     /**
-     * @return Collection<Right>
+     * @return Right[]
      */
-    private function getCurrentUserRights(): Collection
+    private function getCurrentUserRights(): array
     {
         /** @var AdminUserInterface $user */
         $user = $this->currentAdminUserProvider->getCurrentAdminUser();
+        if($user instanceof AdminUserInterface === false) {
+            return [];
+        }
         $role = $user->getRole();
-        return $role->getRights();
+        return $role?->getRights()->toArray() ?? [];
     }
 
     /**
-     * @param Collection<Right> $rights
+     * @param Right[] $rights
      * @return string[]
      */
-    private function getAllowedChannelNames(Collection $rights): array
+    private function getAllowedChannelNames(array $rights): array
     {
         $channelNames = [];
         foreach ($rights as $right) {
