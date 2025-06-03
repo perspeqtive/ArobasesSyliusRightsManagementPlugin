@@ -20,43 +20,34 @@ class CreateAdminRightCommand extends Command
 {
     protected static $defaultName = 'arobases:right:create-admin-right';
 
-    protected EntityManagerInterface $manager;
-
-    protected RightAdapter $rightAdapter;
-
-    protected RightGroupRepository $groupRightRepository;
-
-    protected RightRepository $rightRepository;
-
-    protected string $defaultAdminUser;
-    protected string $defaultAdminRoleCode;
-    protected string $defaultAdminRoleName;
-
     public function __construct(
-        EntityManagerInterface $manager,
-        RightAdapter $rightAdapter,
-        RightGroupRepository $groupRightRepository,
-        RightRepository $rightRepository,
-        string $defaultAdminUser,
-        string $defaultAdminRoleCode,
-        string $defaultAdminRoleName
+        private EntityManagerInterface $manager,
+        private RightProviderInterface $rightProvider,
+        private RightGroupRepository   $groupRightRepository,
+        private RightRepository        $rightRepository,
+        private string                 $defaultAdminUser,
+        private string                 $defaultAdminRoleCode,
+        private string                 $defaultAdminRoleName
     ) {
-        $this->manager = $manager;
-        $this->rightAdapter = $rightAdapter;
-        $this->groupRightRepository = $groupRightRepository;
-        $this->rightRepository = $rightRepository;
-        $this->defaultAdminUser = $defaultAdminUser;
-        $this->defaultAdminRoleCode = $defaultAdminRoleCode;
-        $this->defaultAdminRoleName = $defaultAdminRoleName;
         parent::__construct();
     }
 
-    protected function configure(): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::configure();
+        $administratorRole = $this->getAdministratorRole();
+
+        $arrayRights = $this->rightProvider->getRights();
+
+        foreach ($arrayRights as $group => $values) {
+            $rightGroup = $this->buildRightGroup($group);
+            $this->buildRightGroupRights($values, $rightGroup, $administratorRole);
+        }
+        $this->manager->flush();
+
+        return Command::SUCCESS;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    private function getAdministratorRole(): ?Role
     {
         $administratorRole = null;
         $defaultAdminUser = $this->defaultAdminUser;
@@ -74,40 +65,41 @@ class CreateAdminRightCommand extends Command
                 $adminUser->setRole($administratorRole);
             }
         }
+        return $administratorRole;
+    }
 
-        $arrayRights = $this->rightAdapter->getRightsFromYaml();
-
-        foreach ($arrayRights as $group => $values) {
-            /** @var RightGroup $rightGroup */
-            $rightGroup = $this->groupRightRepository->findOneBy(['name' => $group]);
-            if (!$rightGroup) {
-                $rightGroup = new RightGroup();
-            }
-            $rightGroup->setName($group);
-            $this->manager->persist($rightGroup);
-            $this->manager->flush();
-
-            if (!array_key_exists('rights', $values)) {
-                continue;
-            }
-            foreach ($values['rights'] as $key => $value) {
-                $right = $this->rightRepository->findOneBy(['name' => $value['name']]);
-                if (!$right) {
-                    $right = new Right();
-                }
-                $right->setName($value['name']);
-                $right->setRoutes($value['routes']);
-                $right->setExcludedRoutes($value['excludes']);
-                $right->setRightGroup($rightGroup);
-                if ($administratorRole) {
-                    $right->addRole($administratorRole);
-                }
-
-                $this->manager->persist($right);
-            }
+    private function buildRightGroup(int|string $group): RightGroup
+    {
+        /** @var RightGroup $rightGroup */
+        $rightGroup = $this->groupRightRepository->findOneBy(['name' => $group]);
+        if (!$rightGroup) {
+            $rightGroup = new RightGroup();
         }
+        $rightGroup->setName($group);
+        $this->manager->persist($rightGroup);
         $this->manager->flush();
+        return $rightGroup;
+    }
 
-        return Command::SUCCESS;
+    private function buildRightGroupRights(array $values, RightGroup $rightGroup, ?Role $administratorRole): void
+    {
+        if (!array_key_exists('rights', $values)) {
+            return;
+        }
+        foreach ($values['rights'] as $value) {
+            $right = $this->rightRepository->findOneBy(['name' => $value['name']]);
+            if (!$right) {
+                $right = new Right();
+            }
+            $right->setName($value['name']);
+            $right->setRoutes($value['routes']);
+            $right->setExcludedRoutes($value['excludes']);
+            $right->setRightGroup($rightGroup);
+            if ($administratorRole) {
+                $right->addRole($administratorRole);
+            }
+
+            $this->manager->persist($right);
+        }
     }
 }

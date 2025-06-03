@@ -41,6 +41,11 @@ services:
     class: Arobases\SyliusRightsManagementPlugin\Adapter\RightAdapter
     arguments:
       - '@service_container'
+    tags:
+      - { name: 'right_provider' }
+
+  Arobases\SyliusRightsManagementPlugin\Provider\CompositeRightProvider:
+    class: Arobases\SyliusRightsManagementPlugin\Provider\CompositeRightProvider
 
   arobases_sylius_rights_management_plugin.command.create_admin_right:
     class: Arobases\SyliusRightsManagementPlugin\Command\CreateAdminRightCommand

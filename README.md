@@ -234,10 +234,6 @@ imports:
 
 arobases_sylius_rights_management:
   groups:
-    arobases_sylius_rights_management_plugin.group.product:
-      rights:
-    #here you will update "arobases_sylius_rights_management_plugin.group.product"
-
     app.group.my_new_group:
       rights:
         all:
@@ -245,8 +241,3 @@ arobases_sylius_rights_management:
           routes: ['app_my_custom_route_*']
     #here you will create a new group and a new right
  ```
-
-
-
-
-
