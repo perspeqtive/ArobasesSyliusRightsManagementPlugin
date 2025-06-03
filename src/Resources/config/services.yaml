@@ -51,7 +51,7 @@ services:
     class: Arobases\SyliusRightsManagementPlugin\Command\CreateAdminRightCommand
     arguments:
       - '@doctrine.orm.entity_manager'
-      - '@arobases_sylius_rights_management_plugin.adapter.right_adapter'
+      - '@Arobases\SyliusRightsManagementPlugin\Provider\CompositeRightProvider'
       - '@arobases_sylius_rights_management_plugin.repository.right_group'
       - '@arobases_sylius_rights_management_plugin.repository.right'
       - '%default_admin_user%'

@@ -68,7 +68,7 @@ class CreateAdminRightCommand extends Command
         return $administratorRole;
     }
 
-    private function buildRightGroup(int|string $group): RightGroup
+    private function buildRightGroup(string $group): RightGroup
     {
         /** @var RightGroup $rightGroup */
         $rightGroup = $this->groupRightRepository->findOneBy(['name' => $group]);
