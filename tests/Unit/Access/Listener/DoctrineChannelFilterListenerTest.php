@@ -52,6 +52,6 @@ class DoctrineChannelFilterListenerTest extends TestCase
         $event = new RequestEvent(new MockHttpKernel(), $request, HttpKernelInterface::MAIN_REQUEST);
         $this->listener->onKernelRequest($event);
 
-        self::assertFalse($this->configurator->wasCalled);
+        self::assertTrue($this->configurator->wasCalled);
     }
 }

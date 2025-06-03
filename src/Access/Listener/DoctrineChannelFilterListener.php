@@ -27,7 +27,7 @@ class DoctrineChannelFilterListener
             return false;
         }
 
-        if (str_starts_with($event->getRequest()->getRequestUri(), 'admin') === false) {
+        if (str_starts_with($event->getRequest()->getRequestUri(), '/admin') === false) {
             return false;
         }
         return true;
