@@ -35,6 +35,9 @@ final class AdminMenuListener implements AdminMenuListenerInterface
                     $rootChildren->removeChild($children);
                 }
             }
+            if ($rootChildren->hasChildren() === false) {
+                $menu->removeChild($rootChildren);
+            }
         }
     }
 }
