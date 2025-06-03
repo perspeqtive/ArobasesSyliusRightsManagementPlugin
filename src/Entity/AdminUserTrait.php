@@ -8,13 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait AdminUserTrait
 {
-    /**
-     * @ORM\ManyToOne(targetEntity="Arobases\SyliusRightsManagementPlugin\Entity\Role",
-     *     inversedBy="adminUsers",
-     *     fetch="EXTRA_LAZY",
-     *      cascade={"persist"}
-     * )
-     */
+    #[ORM\ManyToOne(
+        targetEntity: Role::class,
+        inversedBy: 'adminUsers',
+        fetch: 'EXTRA_LAZY',
+        cascade: ['persist']
+    )]
     protected ?Role $role = null;
 
     public function getRole(): ?Role
