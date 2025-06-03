@@ -23,7 +23,14 @@ class CompositeRightProvider implements RightProviderInterface
     {
         $allRights = [];
         foreach($this->provider as $provider) {
-            $allRights[] = $provider->getRights();
+            $rights = $provider->getRights();
+            foreach($rights as $name => $right) {
+                if(!isset($allRights[$name])) {
+                    $allRights[$name] = [];
+                }
+                $allRights[$name][] = $right;
+            }
+            $allRights[] = $rights;
         }
         return array_merge(...$allRights);
     }
