@@ -76,6 +76,9 @@ class Role implements ResourceInterface, CodeAwareInterface
         $this->name = $name;
     }
 
+    /**
+     * @return Collection<Right>
+     */
     public function getRights(): Collection
     {
         return $this->rights;

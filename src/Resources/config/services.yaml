@@ -44,6 +44,13 @@ services:
     tags:
       - { name: 'right_provider' }
 
+  Arobases\SyliusRightsManagementPlugin\Adapter\ChannelRightProvider:
+    class: Arobases\SyliusRightsManagementPlugin\Adapter\ChannelRightProvider
+    arguments:
+      $channelRepository: '@sylius.repository.channel'
+    tags:
+      - { name: 'right_provider' }
+
   Arobases\SyliusRightsManagementPlugin\Provider\CompositeRightProvider:
     class: Arobases\SyliusRightsManagementPlugin\Provider\CompositeRightProvider
 
@@ -83,3 +90,16 @@ services:
       - '@arobases_sylius_rights_management_plugin.provider.current_admin_user_provider'
     tags:
       - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }
+
+  Arobases\SyliusRightsManagementPlugin\Access\Doctrine\ChannelFilterConfigurator:
+    class: Arobases\SyliusRightsManagementPlugin\Access\Doctrine\ChannelFilterConfigurator
+    arguments:
+      $entityManager: '@doctrine.orm.entity_manager'
+      $currentAdminUserProvider: '@arobases_sylius_rights_management_plugin.provider.current_admin_user_provider'
+
+  Arobases\SyliusRightsManagementPlugin\Access\Listener\DoctrineChannelFilterListener:
+    class: Arobases\SyliusRightsManagementPlugin\Access\Listener\DoctrineChannelFilterListener
+    arguments:
+      $configurator: '@Arobases\SyliusRightsManagementPlugin\Access\Doctrine\ChannelFilterConfigurator'
+    tags:
+      - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

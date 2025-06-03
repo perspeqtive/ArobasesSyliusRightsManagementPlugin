@@ -64,13 +64,15 @@
         "psr-4": {
             "Arobases\\SyliusRightsManagementPlugin\\": "src/",
             "Tests\\Arobases\\SyliusRightsManagementPlugin\\": "tests/Application/src/"
-
         }
     },
     "autoload-dev": {
         "classmap": [
             "tests/Application/Kernel.php"
-        ]
+        ],
+        "psr-4": {
+            "Arobases\\SyliusRightsManagementPlugin\\Tests\\": "tests/"
+        }
     },
     "scripts": {
         "post-install-cmd": [
