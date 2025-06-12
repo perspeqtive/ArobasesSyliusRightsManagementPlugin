@@ -89,7 +89,7 @@ services:
       - '@arobases_sylius_rights_management_plugin.checker.admin_user_access_checker'
       - '@arobases_sylius_rights_management_plugin.provider.current_admin_user_provider'
     tags:
-      - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }
+      - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems, priority: -9999 }
 
   Arobases\SyliusRightsManagementPlugin\Access\Doctrine\ChannelFilterConfigurator:
     class: Arobases\SyliusRightsManagementPlugin\Access\Doctrine\ChannelFilterConfigurator
