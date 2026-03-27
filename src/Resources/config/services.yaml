@@ -103,3 +103,12 @@ services:
       $configurator: '@Arobases\SyliusRightsManagementPlugin\Access\Doctrine\ChannelFilterConfigurator'
     tags:
       - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+  arobases.sylius_rights_management_plugin.command.update_channel_rights_command:
+    class: Arobases\SyliusRightsManagementPlugin\Command\UpdateChannelRightsCommand
+    arguments:
+      $rightGroupRepository: '@arobases_sylius_rights_management_plugin.repository.right_group'
+      $channelRightProvider: '@Arobases\SyliusRightsManagementPlugin\Adapter\ChannelRightProvider'
+      $entityManager: '@doctrine.orm.entity_manager'
+    tags:
+      - { name: console.command }

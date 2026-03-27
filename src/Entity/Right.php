@@ -32,7 +32,7 @@ class Right implements ResourceInterface
      * @ORM\ManyToMany(targetEntity="Arobases\SyliusRightsManagementPlugin\Entity\Role",
      *     inversedBy="rights",
      *     fetch="EXTRA_LAZY",
-     *      cascade={"persist", "remove"}
+     *      cascade={"persist"}
      * )
      * * @ORM\JoinTable(name="arobases_sylius_rights_management_right_role",
      *      joinColumns={@ORM\JoinColumn(name="right_id", referencedColumnName="id")},
@@ -45,7 +45,7 @@ class Right implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="Arobases\SyliusRightsManagementPlugin\Entity\RightGroup",
      *     inversedBy="rights",
      *     fetch="EXTRA_LAZY",
-     *      cascade={"persist", "remove"}
+     *      cascade={"persist"}
      * )
      */
     protected ?RightGroup $rightGroup = null;
